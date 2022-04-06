@@ -1,56 +1,97 @@
+<?php
 
-                      
-  <?php
+require_once('include/DB.php');
+
+/* custom validation starts here */
 
 $nameError= "";
 $emailError= " ";
-$genderError= " ";
 $passwordError= " ";
+$genderError= " ";
+
 
 
 if (isset($_POST['submit'])) {
     
-    if (empty($_POST["name"])) {
+    //if not blank
 
-       $nameError="Name is required";
+    if(!empty($_POST['name']) && !empty($_POST['email']) && 
+
+    !empty($_POST['password']) && !empty($_POST['dob']) &&
+
+    !empty($_POST['gender'])&& !empty($_POST['country']) &&
+
+    !empty($_POST['deparment'])&& !empty($_POST['comment']) && !empty($_POST['photo'])
+    ){
+
+
+
+        $name=$_POST['name'];
+        $email=$_POST['email'];
+        $password=md5($_POST['password']);
+        $dob=$_POST['dob'];
+        $gender=$_POST['gender'];
+        $country=$_POST['country'];
+        $deparment=$_POST['deparment'];
+        $comment=$_POST['comment'];
+        $photo=$_POST['photo'];
+        
+        $connectingDb;
+        $sql="INSERT INTO users(name,email,password,dob,gender,country,deparment,comment,photo)
+        VALUES(:Name,:Email,:Password,:Dob,:Gender,:Country,:Deparment,:Comment,:Photo)";
+
+        $stmt=$connectingDb->prepare($sql);
+        $stmt->bindValue('Name',$name);
+        $stmt->bindValue('Email',$email);
+        $stmt->bindValue('Password',$password);
+        $stmt->bindValue('Dob',$dob);
+        $stmt->bindValue('Gender',$gender);
+        $stmt->bindValue('Country',$country);
+        $stmt->bindValue('Deparment',$deparment);
+        $stmt->bindValue('Comment',$comment);
+        $stmt->bindValue('Photo',$photo);
+
+        $result=$stmt->execute();
+
+        if ($result) {
+            
+            echo '<span class="success">Data inserted successfully</span>';
+        }
 
     }else {
 
-        $Name=Test_User_Input($_POST["name"]);
-        
+        //if blank
+    if(empty($_POST['name']) && empty($_POST['email']) && 
+
+    empty($_POST['password'])  &&  empty($_POST['gender'])){
+    
+
+       $nameError="Name is required";
+       $emailError="Email is required";
+       $passwordError="Password is required";
+       $genderError="Gender is required";
+
+    }
+    // else {
+
+    //     $Name=Test_User_Input($_POST['name']);
+    //     $Email=Test_User_Input($_POST['email']);
+    //     $Password=Test_User_Input($_POST['password']);
+    //     $Gender=Test_User_Input($_POST['gender']);
+    // }
+
     }
 
-    if (empty($_POST["email"])) {
-
-        $emailError="Email is required";
- 
-     }else {
- 
-         $Email=Test_User_Input($_POST["email"]);
-         
-     }
-
-     if (empty($_POST["gender"])) {
-         
-        $genderError="Gender is required";
-     }else {
-         $Gender=Test_User_Input($_POST["gender"]);
-     }
-
-     if (empty($_POST["password"])) {
-         
-        $passwordError="Password is required";
-     }else {
-         $Password=Test_User_Input($_POST["password"]);
-     }
-
-
+    
 }
 
- function Test_User_Input($Data)
-{
-    return $Data;
-}
+//  function Test_User_Input($Data)
+// {
+//     return $Data;
+// }
+
+/* custom validation ends here */
+
 
 
 ?>
@@ -80,11 +121,18 @@ span{
         border-radius: 25px;
         padding: 10px;
     }
+.success{
+
+    color: green;
+    font-family: Bitter,Georgia,"Times New Roman",Times,serif;
+    font-size: 1.4rem; 
+    font-weight:bold;
+}
 </style>
 
 <?php ?>
 
-<form action="" method="POST">
+<form action="" method="POST" enctype="multipart/form-data">
 
 
 <legend>User Registration Form</legend>
