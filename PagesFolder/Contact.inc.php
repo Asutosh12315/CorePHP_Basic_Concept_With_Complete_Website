@@ -1,107 +1,74 @@
+
+
 <?php
 
-require_once('include/DB.php');
+require_once("include/DB.php");
 
-/* custom validation starts here */
-
-$nameError= "";
-$emailError= " ";
-$passwordError= " ";
-$genderError= " ";
-
-
-
-if (isset($_POST['submit'])) {
+if (isset($_POST["submit"])) {
     
-    //if not blank
+    if (!empty($_POST["name"])&&!empty($_POST["email"])) {
+    
+        $name=$_POST["name"];
+        $email=$_POST["email"];
+        $password=md5($_POST["password"]);
+        $dob=$_POST["dob"];
+        $gender=$_POST["gender"];
+        $country=$_POST["country"];
+        $department=$_POST["department"];
+        $comments=$_POST["comments"];
+        $photo=$_POST["photo"];
 
-    if(!empty($_POST['name']) && !empty($_POST['email']) && 
+        global $connectingDb;
 
-    !empty($_POST['password']) && !empty($_POST['dob']) &&
-
-    !empty($_POST['gender'])&& !empty($_POST['country']) &&
-
-    !empty($_POST['deparment'])&& !empty($_POST['comment']) && !empty($_POST['photo'])
-    ){
-
-
-
-        $name=$_POST['name'];
-        $email=$_POST['email'];
-        $password=md5($_POST['password']);
-        $dob=$_POST['dob'];
-        $gender=$_POST['gender'];
-        $country=$_POST['country'];
-        $deparment=$_POST['deparment'];
-        $comment=$_POST['comment'];
-        $photo=$_POST['photo'];
-        
-        $connectingDb;
-        $sql="INSERT INTO users(name,email,password,dob,gender,country,deparment,comment,photo)
-        VALUES(:Name,:Email,:Password,:Dob,:Gender,:Country,:Deparment,:Comment,:Photo)";
+        $sql="INSERT INTO users(name,email,password,dob,gender,country,department,comments,photo)
+        VALUES(:Xname,:Xemail,:Xpassword,:Xdob,:Xgender,:Xcountry,:Xdepartment,:Xcomment,:photo)";
 
         $stmt=$connectingDb->prepare($sql);
-        $stmt->bindValue('Name',$name);
-        $stmt->bindValue('Email',$email);
-        $stmt->bindValue('Password',$password);
-        $stmt->bindValue('Dob',$dob);
-        $stmt->bindValue('Gender',$gender);
-        $stmt->bindValue('Country',$country);
-        $stmt->bindValue('Deparment',$deparment);
-        $stmt->bindValue('Comment',$comment);
-        $stmt->bindValue('Photo',$photo);
-
+        $stmt->bindValue(':Xname',$name);
+        $stmt->bindValue(':Xemail',$email);
+        $stmt->bindValue(':Xpassword',$password);
+        $stmt->bindValue(':Xdob',$dob);
+        $stmt->bindValue(':Xgender',$gender);
+        $stmt->bindValue(':Xcountry',$country);
+        $stmt->bindValue(':Xdepartment',$department);
+        $stmt->bindValue(':Xcomment',$comments);
+        $stmt->bindValue(':photo',$photo);
         $result=$stmt->execute();
 
         if ($result) {
             
-            echo '<span class="success">Data inserted successfully</span>';
+            echo '<span class="success">Great ! Your Qurey Has Been Submitted</span>';
+        
         }
+        
+
+
+
+
+
+
 
     }else {
 
-        //if blank
-    if(empty($_POST['name']) && empty($_POST['email']) && 
-
-    empty($_POST['password'])  &&  empty($_POST['gender'])){
-    
-
-       $nameError="Name is required";
-       $emailError="Email is required";
-       $passwordError="Password is required";
-       $genderError="Gender is required";
-
+        echo '<span class="failed">Oops ! Something went wrong</span>';
     }
-    // else {
-
-    //     $Name=Test_User_Input($_POST['name']);
-    //     $Email=Test_User_Input($_POST['email']);
-    //     $Password=Test_User_Input($_POST['password']);
-    //     $Gender=Test_User_Input($_POST['gender']);
-    // }
-
-    }
-
-    
 }
 
-//  function Test_User_Input($Data)
-// {
-//     return $Data;
-// }
-
-/* custom validation ends here */
-
-
-
 ?>
-  
 
 	<h1 id="request">Movie Premier Booking Form</h1>
 <p class="req">Interested in Movie Premier at NY Cinema? Please complete and submit the following form to the Booking Office. One of our representatives will send you an information package tailored to the field(s) of Premier that interest you. Please indicate whether you would like additional information or not</p>
 
 
 <style type="text/css">
+
+.failed{
+
+    color:red;
+    font-family: Bitter,Georgia,"Times New Roman",Times,serif;
+    font-size: 1.4rem; 
+    font-weight:bold;
+}
 form {
         width: 400px;
         height: auto;
@@ -128,26 +95,45 @@ span{
     font-size: 1.4rem; 
     font-weight:bold;
 }
+
+table{
+            width: 100%;
+            height: 100px;
+            border: 2px solid black;
+            background-color: white;
+            
+
+        }
+        
+        tr ,th,td{
+            border: 2px solid black;
+            text-align: center;
+            padding: 5px;
+
+        }
+        a{
+            text-decoration: none;
+        }
 </style>
 
-<?php ?>
 
-<form action="" method="POST" enctype="multipart/form-data">
+
+<form action="" method="post">
 
 
 <legend>User Registration Form</legend>
 
 <label for="name">Name:</label>
 <input type="text" name="name" id="name">   
-<span>*<?php echo $nameError; ?></span><br><br>
+<span>*</span><br><br>
 
 <label for="email">Email:</label>
 <input type="email" name="email" id="email" >
-<span>*<?php echo $emailError; ?></span><br><br>
+<span>*</span><br><br>
 
 <label for="password">Password:</label>
 <input type="password" name="password" id="password">
-<span>*<?php echo $passwordError; ?></span><br><br>
+<span>*</span><br><br>
 
 <label for="dob">Date Of Birth:</label>
 <input type="date" name="dob" id="dob"><br><br>
@@ -161,7 +147,7 @@ span{
 
 <label for="other">Other:</label>
 <input type="radio" id="gender" name="gender" value="other">
-<span>*<?php echo $genderError; ?></span><br><br>
+<span>*</span><br><br>
 
 <label for="photo">Choose your photo:</label>
 <input type="file" id="photo" name="photo"><br><br>
@@ -171,14 +157,14 @@ span{
 <input type="checkbox" name="country" id="country" value="Bangladesh">Bangladesh <br><br>
 
 <label for="deparment">Deparment : </label>
-<select name="deparment" id="deparment">            
+<select name="department" id="deparment">            
     <option value="cse">CSE</option>
     <option value="ece">ECE</option>
     <option value="it">IT</option>
 </select> <br><br>
 
 <label for="comment">Comments:</label><br><br>
-<textarea name="comment" id="comment" cols="30" rows="5"></textarea><br><br>
+<textarea name="comments" id="comment" cols="30" rows="5"></textarea><br><br>
 
 <input type="submit" name="submit" value="Submit">
 <input type="reset" value="Reset">
@@ -186,6 +172,74 @@ span{
 
 </form> 
  	
-	  <div class="clear"></div>	  	 
+	  <div class="clear"></div>
+      <br><br>	  	 
+<hr>
+<table>
+        <legend>User Records</legend>
+        <thead>
+            <tr>
+                <th>
+                    ID
+                </th>
+                
+                <th>
+                    Name
+                </th>
+                <th>
+                    Email
+                </th>
+                
+                <th>
+                    DOB
+                </th>
+                
+                <th>
+                    Deparment
+                </th>
+                <th>
+                    Action
+                </th>
+                <th>
+                    Another Action
+                </th>
+                
+            </tr>
+        </thead>
+        <tbody>
 
-	    
+    <?php  
+    
+   global $connectingDb;
+   $sql="SELECT * FROM users";
+
+   $stmt=$connectingDb->query($sql);
+
+   while ($Data=$stmt->fetch()) {
+    
+    $id=$Data["id"];
+    $name=$Data["name"];
+    $email=$Data["email"];    
+    $dob=$Data["dob"]; 
+    $department=$Data["department"];
+    
+
+   
+    
+    
+    ?>
+            <tr>
+                <td><?php echo $id; ?></td>
+                <td><?php echo $name; ?></td>
+                <td><?php echo $email; ?></td>
+                <td><?php echo $dob; ?></td>                
+                <td><?php echo $department; ?></td>
+                <td><a href="<?php $id ?>">Edit</a></td>
+                <td><a href="<?php  ?>">Delete</a></td>
+                
+            </tr>
+            
+
+    <?php } ?>
+        </tbody>
+    </table>

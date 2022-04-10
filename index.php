@@ -158,7 +158,7 @@ background-color:#5D0580;
                 <li><a href="index.php?pageName=About" >About Us </a></li>
                 <li><a href="index.php?pageName=Contact">Contact Us</a></li>
 		<li><a href="index.php?pageName=ShareWithFriend">Tell a friend</a></li>
-                <li><a href="">Coming Soon</a></li>
+                <li><a href="">View Users</a></li>
 		<li><a href="">Forum</a></li>
             </ul>
             <div class="clear"></div>
