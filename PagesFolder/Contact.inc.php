@@ -234,8 +234,8 @@ table{
                 <td><?php echo $email; ?></td>
                 <td><?php echo $dob; ?></td>                
                 <td><?php echo $department; ?></td>
-                <td><a href="<?php $id ?>">Edit</a></td>
-                <td><a href="<?php  ?>">Delete</a></td>
+                <td><a href="Update.php?id=<?php echo $id; ?>">Edit</a></td>
+                <td><a href="Delete.php?id=<?php echo $id; ?>">Delete</a></td>
                 
             </tr>
             
@@ -243,3 +243,18 @@ table{
     <?php } ?>
         </tbody>
     </table>
+
+    <hr>
+    <br><br><br>
+
+    <div>
+        <legend>Search Your User</legend>
+        <br>
+        <fieldset>
+            <form action="" method="post">
+                <input type="text" name="search" placeholder="search by name or email">
+                <input type="submit" name="search" value="Search">
+
+            </form>
+        </fieldset>
+    </div>
