@@ -248,13 +248,22 @@ table{
     <br><br><br>
 
     <div>
+
         <legend>Search Your User</legend>
         <br>
         <fieldset>
-            <form action="" method="post">
-                <input type="text" name="search" placeholder="search by name or email">
-                <input type="submit" name="search" value="Search">
+            <form action="Search.php" method="get">
+                <input type="text" name="Search" placeholder="search by name or email">
+                <input type="submit" name="searchButton" value="SearchRecord">
 
             </form>
         </fieldset>
+
+
+        
+    <?php
+    
+       
+    
+    ?>
     </div>
